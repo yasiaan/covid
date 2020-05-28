@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include "../model/connexion.php";
+include "model/connexion.php";
 
 if(isset($_POST['connexion'])){
     if(isset($_POST['mot_de_passe']) && isset($_POST['email'])){
@@ -36,7 +36,7 @@ if(isset($_POST['connexion'])){
     }
 }
 
-include "../model/nav.php";
+include "model/nav.php";
 
 ?>
         <div>
@@ -66,4 +66,4 @@ include "../model/nav.php";
                 </div>
             </form>
         </div>
-<?php include "../model/footer.php"; ?>
+<?php include "model/footer.php"; ?>
