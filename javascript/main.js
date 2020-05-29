@@ -49,6 +49,7 @@ function pushToDOM(data,input){
     var response = JSON.parse(data);
     console.log(response);
     var dataList = [['Cases type', 'Number of cases']];
+    var dataList1 = [['Cases type', 'Number of cases']];
     
     document.querySelector('.js-container').innerHTML = null;
     var found = 0;
@@ -68,20 +69,34 @@ function pushToDOM(data,input){
             countryStats.innerHTML += '<hr><li>For more information click <a href="'+response[i].sourceUrl+'" target="_blank" title="'+countryName+'\'s covid-19 informations">here</a>';
         }
         found = 1;
-        if( response[i].infected != "NA") dataList.push(['Infected',response[i].infected]);
+        if( response[i].infected != "NA") {
+            var r = 0, d = 0;
+            if( response[i].recovered != "NA") r = response[i].recovered;
+            if( response[i].deceased != "NA") d = response[i].deceased;
+            dataList.push(['Cases receiving treatment',response[i].infected - ( r + d )]);
+            if( response[i].tested != "NA") dataList1.push(
+                ['Excluded cases', response[i].tested - iresponse[i].nfected],
+                ['Confirmed cases', response[i].infected]);
+        }
+        if( response[i].deceased != "NA") dataList.push(['Deceased',response[i].deceased]);
         if( response[i].recovered != "NA") dataList.push(['Recovered',response[i].recovered]);
-        if( response[i].deceased  != "NA") dataList.push(['Deceased',response[i].deceased]);
         console.log(dataList);
-
-        document.querySelector('#chart_div').innerHTML = null;
-        drawPieChart(dataList, countryName+' statistics ');
+        
+        
+        document.querySelector('#chart_div0').innerHTML = null;
+        document.querySelector('#chart_div1').innerHTML = null;
+        drawPieChart(dataList, countryName+' statistics ',0);
+        if( dataList1.length > 1 ){
+            drawPieChart(dataList1, countryName+' statistics ',1);
+        }
     }
     if(found === 0){
         console.log(input+' not found !');
         var countryStats = document.createElement('h1');
         countryStats.className = "container-stats";
         countryStats.innerHTML = '<span id="error">Sorry, we have no information about</span> "'+input+'"';
-        document.querySelector('#chart_div').innerHTML = null;
+        document.querySelector('#chart_div0').innerHTML = null;
+        document.querySelector('#chart_div1').innerHTML = null;
     }
     document.querySelector('.js-container').appendChild(countryStats);        
 };
@@ -90,6 +105,7 @@ function worldData(data){
     var response = JSON.parse(data);
     var tested = 0, infected = 0, deceased = 0, recovered = 0;
     var dataList = [['Cases type', 'Number of cases']];
+    var dataList1 = [['Cases type', 'Number of cases']];
     for( var i = 0 ; i < response.length ; i++){
         if( !isNaN(response[i].tested) ) tested += response[i].tested ;
         if( !isNaN(response[i].infected) ) infected += response[i].infected ;
@@ -97,9 +113,12 @@ function worldData(data){
         if( !isNaN(response[i].recovered) ) recovered += response[i].recovered;
     };
 
-    document.querySelector('#chart_div').innerHTML = null;
-    dataList.push(['Infected', infected], ['Deceased', deceased], ['Recovered', recovered]);
-    drawPieChart(dataList, 'World Data');
+    document.querySelector('#chart_div0').innerHTML = null;
+    document.querySelector('#chart_div1').innerHTML = null;
+    dataList.push(['Cases receiving treatment',infected - ( recovered + deceased )], ['Deceased', deceased], ['Recovered', recovered]);
+    dataList1.push(['Excluded cases', tested - infected],['Confirmed cases', infected]);
+    drawPieChart(dataList, 'World Data',0);
+    drawPieChart(dataList1, 'Excluded and confirmed cases',1);
     console.log('World Data');
     var countryStats = document.createElement('ul');
     countryStats.className = "container-stats";
@@ -113,8 +132,8 @@ function worldData(data){
 
 }
 
-//Display PieChart
-function drawPieChart(dataList, countryTitle){
+//Display Pie Chart
+function drawPieChart(dataList, countryTitle,i){
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
@@ -127,7 +146,7 @@ function drawPieChart(dataList, countryTitle){
             is3D: true,
             // pieHole: 0.4
         };
-    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.PieChart(document.getElementById('chart_div'+i));
     chart.draw(data, options);
     };
 }
