@@ -69,6 +69,8 @@ function pushToDOM(data,input){
             countryStats.innerHTML += '<hr><li>For more information click <a href="'+response[i].sourceUrl+'" target="_blank" title="'+countryName+'\'s covid-19 informations">here</a>';
         }
         found = 1;
+        if( response[i].recovered != "NA") dataList.push(['Recovered',response[i].recovered]);
+        if( response[i].deceased != "NA") dataList.push(['Deceased',response[i].deceased]);
         if( response[i].infected != "NA") {
             var r = 0, d = 0;
             if( response[i].recovered != "NA") r = response[i].recovered;
@@ -78,8 +80,6 @@ function pushToDOM(data,input){
                 ['Excluded cases', response[i].tested - iresponse[i].nfected],
                 ['Confirmed cases', response[i].infected]);
         }
-        if( response[i].recovered != "NA") dataList.push(['Recovered',response[i].recovered]);
-        if( response[i].deceased != "NA") dataList.push(['Deceased',response[i].deceased]);
         console.log(dataList);
         
         
