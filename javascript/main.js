@@ -113,7 +113,7 @@ function worldData(data){
 
 }
 
-//Display histogram
+//Display PieChart
 function drawPieChart(dataList, countryTitle){
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
