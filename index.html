@@ -4,15 +4,20 @@
 		<title>Corona Stats Search Engine</title>
 		<link rel="stylesheet" href="css/main.css">
 		<link rel="icon" href="images/corona_logo.jpg">
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	</head>
 	<body>
 		<div class="container container-padding50">
-			<input type="text" placeholder="Search for coronavirus statistics by country" class="js-userinput container-textinput" />
+			<input type="text" placeholder="Search for coronavirus statistics by country" class="js-userinput container-textinput" autofocus />
 			<button class="js-go container-button"><img src="images/corona_logo.jpg" width="100%" /></button>
 		</div>
 		<img src="images/Covid-19.png" id="virus" />
+		<div class="chart">
+			<div id="chart_div" style="width:92%; height:100%;"></div>
+		</div>
 		<div class="container js-container">
 		</div>
+		
 		<script src="javascript/main.js"></script>
 	</body>
 </html>
