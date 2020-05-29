@@ -78,8 +78,8 @@ function pushToDOM(data,input){
                 ['Excluded cases', response[i].tested - iresponse[i].nfected],
                 ['Confirmed cases', response[i].infected]);
         }
-        if( response[i].deceased != "NA") dataList.push(['Deceased',response[i].deceased]);
         if( response[i].recovered != "NA") dataList.push(['Recovered',response[i].recovered]);
+        if( response[i].deceased != "NA") dataList.push(['Deceased',response[i].deceased]);
         console.log(dataList);
         
         
