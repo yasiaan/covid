@@ -51,9 +51,9 @@ function pushToDOM(data,input){
     var dataList = [['Cases type', 'Number of cases']];
     var dataList1 = [['Cases type', 'Number of cases']];
     
-    document.querySelector('.js-container').innerHTML = null;
     document.querySelector('#chart_div0').innerHTML = null;
     document.querySelector('#chart_div1').innerHTML = null;
+    document.querySelector('.js-container').innerHTML = null;
     var found = 0;
     for( var i = 0 ; i < response.length ; i++){
         var countryName = response[i].country;
@@ -71,32 +71,33 @@ function pushToDOM(data,input){
             countryStats.innerHTML += '<hr><li>For more information click <a href="'+response[i].sourceUrl+'" target="_blank" title="'+countryName+'\'s covid-19 informations">here</a>';
         }
         found = 1;
-        if( response[i].recovered != "NA") dataList.push(['Recovered',response[i].recovered]);
-        if( response[i].deceased != "NA") dataList.push(['Deceased',response[i].deceased]);
         if( response[i].infected != "NA") {
             var r = 0, d = 0;
             if( response[i].recovered != "NA") r = response[i].recovered;
             if( response[i].deceased != "NA") d = response[i].deceased;
             dataList.push(['Cases receiving treatment',response[i].infected - ( r + d )]);
             if( response[i].tested != "NA") dataList1.push(
-                ['Excluded cases', response[i].tested - iresponse[i].nfected],
+                ['Excluded cases', response[i].tested - response[i].infected],
                 ['Confirmed cases', response[i].infected]);
         }
+        if( response[i].deceased != "NA") dataList.push(['Deceased',response[i].deceased]);
+        if( response[i].recovered != "NA") dataList.push(['Recovered',response[i].recovered]);
         console.log(dataList);
         
+        
+        
+        drawPieChart(dataList, countryName+' statistics ',0);
+        if( dataList1.length > 1 ){
+            drawPieChart(dataList1, countryName+' statistics ',1);
+        }
     }
     if(found === 0){
         console.log(input+' not found !');
         var countryStats = document.createElement('h1');
         countryStats.className = "container-stats";
         countryStats.innerHTML = '<span id="error">Sorry, we have no information about</span> "'+input+'"';
-    }else{
-        drawPieChart(dataList, countryName+' statistics ',0);
-        if( dataList1.length > 1 ){
-            drawPieChart(dataList1, countryName+' statistics ',1);
-        }
-        document.querySelector('.js-container').appendChild(countryStats);        
     }
+    document.querySelector('.js-container').appendChild(countryStats);        
 };
 
 function worldData(data){
