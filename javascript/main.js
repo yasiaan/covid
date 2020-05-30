@@ -52,6 +52,8 @@ function pushToDOM(data,input){
     var dataList1 = [['Cases type', 'Number of cases']];
     
     document.querySelector('.js-container').innerHTML = null;
+    document.querySelector('#chart_div0').innerHTML = null;
+    document.querySelector('#chart_div1').innerHTML = null;
     var found = 0;
     for( var i = 0 ; i < response.length ; i++){
         var countryName = response[i].country;
@@ -82,23 +84,19 @@ function pushToDOM(data,input){
         }
         console.log(dataList);
         
-        
-        document.querySelector('#chart_div0').innerHTML = null;
-        document.querySelector('#chart_div1').innerHTML = null;
-        drawPieChart(dataList, countryName+' statistics ',0);
-        if( dataList1.length > 1 ){
-            drawPieChart(dataList1, countryName+' statistics ',1);
-        }
     }
     if(found === 0){
         console.log(input+' not found !');
         var countryStats = document.createElement('h1');
         countryStats.className = "container-stats";
         countryStats.innerHTML = '<span id="error">Sorry, we have no information about</span> "'+input+'"';
-        document.querySelector('#chart_div0').innerHTML = null;
-        document.querySelector('#chart_div1').innerHTML = null;
+    }else{
+        drawPieChart(dataList, countryName+' statistics ',0);
+        if( dataList1.length > 1 ){
+            drawPieChart(dataList1, countryName+' statistics ',1);
+        }
+        document.querySelector('.js-container').appendChild(countryStats);        
     }
-    document.querySelector('.js-container').appendChild(countryStats);        
 };
 
 function worldData(data){
